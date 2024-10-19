@@ -1,0 +1,20 @@
+services:
+  authentik:
+    image: ghcr.io/goauthentik/server:latest
+    container_name: authentik
+    environment:
+      - AUTHENTIK_ADMIN_EMAIL=admin@itm-nex.us
+      - AUTHENTIK_ADMIN_PASSWORD=yourpassword
+    volumes:
+      - authentik_data:/var/lib/authentik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.authentik.rule=Host(`login.itm-nex.us`)"
+      - "traefik.http.routers.authentik.entrypoints=websecure"
+      - "traefik.http.routers.authentik.tls=true"
+      - "traefik.http.routers.authentik.tls.certresolver=lets_encrypt_resolver"
+      - "traefik.http.routers.authentik.service=authentik"
+      - "traefik.http.services.authentik.loadbalancer.server.port=9000"
+
+volumes:
+  authentik_data:
