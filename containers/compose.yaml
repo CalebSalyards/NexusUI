@@ -22,7 +22,6 @@ services:
         - 9999:8080
 
   traefik:
-    traefik:
     image: traefik:3.1
     container_name: traefik
     restart: unless-stopped
@@ -34,7 +33,7 @@ services:
       # - ./config.yml:/config.yml:ro
     # secrets:
     #   - cf_cert_api
-    env_file: .env
+    env_file: traefik.env
     ports:
       # - 8087:8080
       # - 80:80
