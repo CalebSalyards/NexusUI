@@ -1,5 +1,5 @@
 const signedIn = false;
-const signInButton = document.getElementById('sign-in');
+const signInButton = document.getElementById('submit');
 
 
 
@@ -40,7 +40,8 @@ async function getStuff() {
     //    const geturl = document.getElementById('get-url')
     const getToken = document.getElementById('get-token');
     clientId = getToken.value
-    console.log(clientId)
+
+    console.log(clientId);
     await fetch(clientId)
 
         .then(response => response.json())
