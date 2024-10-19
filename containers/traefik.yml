@@ -3,8 +3,10 @@ global:
   sendAnonymousUsage: true
 
 entryPoints:
+  web:
+    address: ":80"
   websecure:
-    address: :443
+    address: ":443"
 
 accessLog:
   format: "common"
@@ -26,14 +28,16 @@ providers:
    network: proxy
 
 certificatesResolvers:
-  cloudflare:
+  lets_encrypt_resolver:
     acme:
-      email: salsonn@outlook.com
+      email: sal18014@byui.edu
       storage: acme.json
-      caServer: https://acme-v02.api.letsencrypt.org/directory # prod (default)
-      # caServer: https://acme-staging-v02.api.letsencrypt.org/directory # staging
-      dnsChallenge:
-        provider: cloudflare
-        resolvers:
-          - "1.1.1.1:53"
-          - "1.0.0.1:53"
+      # caServer: https://acme-v02.api.letsencrypt.org/directory # prod (default)
+      caServer: https://acme-staging-v02.api.letsencrypt.org/directory # staging
+      httpChallenge:
+        entrypoint: web
+      # dnsChallenge:
+      #   provider: cloudflare
+      #   resolvers:
+      #     - "1.1.1.1:53"
+      #     - "1.0.0.1:53"

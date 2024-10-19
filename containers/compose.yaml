@@ -7,7 +7,7 @@ services:
         - /data/nexus/headscale/config:/etc/headscale/
         - /data/nexus/headscale/keys:/var/lib/headscale/
     ports:
-        - 443:8080
+        - 8080:8080
         - 9090:9090
         - 50443:50443
     command: serve
@@ -35,12 +35,10 @@ services:
     #   - cf_cert_api
     env_file: traefik.env
     ports:
-      # - 8087:8080
-      # - 80:80
+      - 0.0.0.0:80:80
       - 0.0.0.0:443:443
     environment:
       TRAEFIK_DASHBOARD_CREDENTIALS: ${TRAEFIK_DASHBOARD_CREDENTIALS}
-      CF_DNS_API_TOKEN: ${CFDNS}
     healthcheck:
       # Run traefik healthcheck command
       # https://doc.traefik.io/traefik/operations/cli/#healthcheck
@@ -60,6 +58,10 @@ services:
       - "traefik.http.routers.traefik.middlewares=authelia@docker"
       # Certificate management
       - "traefik.http.routers.traefik.tls=true"
-      - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
+      - "traefik.http.routers.traefik.tls.certresolver=lets_encrypt_resolver"
       - "traefik.http.routers.traefik.tls.domains[0].main=itm-nex.us"
       - "traefik.http.routers.traefik.tls.domains[0].sans=*.itm-nex.us"
+
+networks:
+  proxy:
+    name: proxy
