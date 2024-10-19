@@ -1,11 +1,4 @@
-'''
-You will need to install the following api's:
-    - flask
-    - canvasapi
-'''
-
-
-#import api's and libraries
+# Import APIs and libraries
 from flask import Flask, jsonify, request
 from canvasapi import Canvas
 import json
@@ -15,6 +8,21 @@ import string
 # Flask app initialization
 app = Flask(__name__)
 
+from flask import send_from_directory
+
+# Add this route in your existing Flask app code
+@app.route('/index.html')
+def serve_index():
+    return send_from_directory('C:/Users/Neil Buffham/Documents/NexusUI/NexusUI/neils_bs', 'index.html')
+
+# If you want to serve the entire directory (optional)
+@app.route('/')
+def serve_root():
+    return send_from_directory('C:/Users/Neil Buffham/Documents/NexusUI/NexusUI/neils_bs', 'index.html')
+
+# Keep the existing routes below...
+
+
 # Canvas API URL
 API_URL = "https://byui.instructure.com"
 # Canvas API key
@@ -22,6 +30,10 @@ API_KEY = "10706~z3LhXDKeVMLMXv2XhHMVCFJeN9NGZMytLMMKPWxZz8aDyvWLYTRWmRNJURGrT7K
 
 # Initialize a new Canvas object
 canvas = Canvas(API_URL, API_KEY)
+
+@app.route('/')
+def index():
+    return "Welcome to the Canvas API. Available endpoints: /api/courses, /api/students"
 
 @app.route('/api/courses', methods=['GET'])
 def get_courses():
@@ -52,6 +64,9 @@ def get_courses():
     # Return the JSON data as a response
     return jsonify(all_courses)
 
+import random
+import string
+
 @app.route('/api/students', methods=['POST'])
 def get_students_by_course_code():
     # Get the course code from the request
@@ -65,24 +80,33 @@ def get_students_by_course_code():
     if not course:
         return jsonify({'error': 'Course not found'}), 404
 
-    # Get students in the course
-    students = course.get_students()
+    # Use the last three digits of the course ID
+    course_id_str = str(course.id)  # Convert course.id to string
+    last_three_digits = course_id_str[-3:]  # Get the last three characters
+
+    # Get users in the course
+    users = course.get_users(enrollment_type=['student'])  # Retrieve students only
 
     student_list = []
-    for student in students:
-        # Generate a random string of 4 alphanumeric characters
-        random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=4))
+    for user in users:
+        # Extract last name from the full name
+        last_name = user.name.split()[-1][:5]  # Get the last word as last name, limit to 5 characters
 
-        # Create the desired format
+        # Generate a random string of 3 alphanumeric characters
+        random_string = ''.join(random.choices(string.ascii_letters + string.digits, k=3))
+
+        # Create the student entry with available user attributes
         student_entry = {
-            'preferred_name': student.name,
-            'email': student.email,
-            'identifier': f"{course_code}{student.first_name}{random_string}"
+            'preferred_name': user.name,  # Full name
+            'email': user.email if hasattr(user, 'email') else 'N/A',  # Email
+            'identifier': f"{last_three_digits}{last_name}{random_string}"  # Unique identifier
         }
         student_list.append(student_entry)
 
     # Return the student data as JSON
     return jsonify(student_list)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
