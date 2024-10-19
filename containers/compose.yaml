@@ -35,12 +35,10 @@ services:
     #   - cf_cert_api
     env_file: traefik.env
     ports:
-      # - 8087:8080
-      # - 80:80
+      - 0.0.0.0:80:80
       - 0.0.0.0:443:443
     environment:
       TRAEFIK_DASHBOARD_CREDENTIALS: ${TRAEFIK_DASHBOARD_CREDENTIALS}
-      CF_DNS_API_TOKEN: ${CFDNS}
     healthcheck:
       # Run traefik healthcheck command
       # https://doc.traefik.io/traefik/operations/cli/#healthcheck
