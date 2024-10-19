@@ -5,23 +5,45 @@ const courses = 'find out what the courses page is';
 
 
 async function signInCheck(signedIn) {
-    if(signedIn){
+    if (signedIn) {
         signInButton.style.display = 'none';
-    } else{
-
     }
 };
 
-signInCheck(signedIn)
+signInCheck(signedIn);
 
-async function generateCourses(){
+async function generateCourses() {
     const main = document.getElementById('mainPage');
     const coursesList = document.createElement('ul');
-    main.appendChild(coursesList)
+    main.append(coursesList)
     forEach((url.courses), () => {
-        if(url.courses.role == 'teacher' || url.courses.role == 'TA'){
-            const courseSection = document.createElement('section');
-            coursesList.appendChild(courseSection);
-        }
+        const courseSection = document.createElement('section');
+        coursesList.append(courseSection);
     })
+};
+
+
+async function getStudentNames() {
+    const main = document.getElementById('mainPage');
+    const studentList = document.createElement('ul');
+    main.append(studentList)
+    forEach((url.courses), () => {
+        const studentSection = document.createElement('section');
+        studentList.append(studentSection);
+    })
+}
+
+async function getStuff(params) {
+
+    fetch('/api/courses')
+        .then(response => response.json())
+        .then(data => {
+            const courseListDiv = document.getElementById('course-list');
+            data.forEach(course => {
+                const courseItem = document.createElement('div');
+                courseItem.textContent = `${course.course_code}: ${course.course_name}`;
+                courseListDiv.appendChild(courseItem);
+            });
+        })
+        .catch(error => console.error('Error fetching course data:', error));
 }
