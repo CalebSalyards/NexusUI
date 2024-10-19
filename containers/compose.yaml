@@ -1,3 +1,6 @@
+include:
+  - compose-authentik.yaml
+
 services:
   headscale:
     image: headscale/headscale:stable
