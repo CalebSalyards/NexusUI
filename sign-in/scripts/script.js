@@ -1,7 +1,7 @@
 const signedIn = false;
 const signInButton = document.getElementById('sign-in');
-const url = 'Something should be here maybe';
-const courses = 'find out what the courses page is';
+const getToken = document.getElementById('get-token');
+
 
 
 async function signInCheck(signedIn) {
@@ -33,9 +33,13 @@ async function getStudentNames() {
     })
 }
 
-async function getStuff(params) {
-
-    fetch('/api/courses')
+async function getStuff() {
+//    const geturl = document.getElementById('get-url')
+    
+    clientId = getToken.innerText
+    var url = `https://login.byui.edu/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=itm-nex.us&scope=profile`;
+    await fetch('/api/courses')
+    
         .then(response => response.json())
         .then(data => {
             const courseListDiv = document.getElementById('course-list');
@@ -47,3 +51,7 @@ async function getStuff(params) {
         })
         .catch(error => console.error('Error fetching course data:', error));
 }
+
+getToken.addEventListener('click', () => {
+    getStuff();
+})
