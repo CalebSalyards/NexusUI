@@ -1,0 +1,19 @@
+body{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 300px));
+}
+
+section{
+    font-size: larger;
+    text-align: center;
+    border: 1px solid black;
+    gap: 10px;
+    width: minmax(200px, 300px);
+    padding: auto;
+  
+}
+
+section:hover{
+    cursor: pointer;
+    background-color: #E6E6E6;
+}
