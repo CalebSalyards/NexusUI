@@ -65,7 +65,8 @@ services:
       - "traefik.http.routers.traefik.tls=true"
       - "traefik.http.routers.traefik.tls.certresolver=lets_encrypt_resolver"
       - "traefik.http.routers.traefik.tls.domains[0].main=itm-nex.us"
-      - "traefik.http.routers.traefik.tls.domains[0].sans=*.itm-nex.us"
+      - "traefik.http.routers.traefik.tls.domains[1].main=traefik.itm-nex.us"
+      # - "traefik.http.routers.traefik.tls.domains[0].sans=*.itm-nex.us"
 
 networks:
   proxy:
