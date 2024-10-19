@@ -19,6 +19,10 @@ async function generateCourses() {
     forEach((url.courses), () => {
         const courseSection = document.createElement('section');
         coursesList.append(courseSection);
+        courseSection.addEventListener('click', () => {
+            const courseId = document.getElementById('course-id')
+            getStudentNames()
+        })
     })
 };
 
@@ -36,9 +40,9 @@ async function getStudentNames() {
 async function getStuff() {
     //    const geturl = document.getElementById('get-url')
     const getToken = document.getElementById('get-token');
-    clientId = getToken.innerText
-    var url = `https://login.byui.edu/oauth2/authorize?client_id=${clientId}&response_type=code&redirect_uri=itm-nex.us&scope=profile`;
-    await fetch('/api/courses')
+    clientId = getToken.value
+    console.log(clientId)
+    await fetch(clientId)
 
         .then(response => response.json())
         .then(data => {

@@ -25,6 +25,11 @@ services:
     image: traefik:3.1
     container_name: traefik
     restart: unless-stopped
+    # command:
+    #   - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+    #   - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+    #   - "--certificatesresolvers.myresolver.acme.email=sal18014@byui.edu"
+    #   - "--certificatesresolvers.myresolver.acme.storage=/acme.json"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -55,12 +60,13 @@ services:
       - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.rule=Host(`traefik.itm-nex.us`)"
       - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.routers.traefik.middlewares=authelia@docker"
+      # - "traefik.http.routers.traefik.middlewares=authentik@docker"
       # Certificate management
       - "traefik.http.routers.traefik.tls=true"
       - "traefik.http.routers.traefik.tls.certresolver=lets_encrypt_resolver"
       - "traefik.http.routers.traefik.tls.domains[0].main=itm-nex.us"
-      - "traefik.http.routers.traefik.tls.domains[0].sans=*.itm-nex.us"
+      - "traefik.http.routers.traefik.tls.domains[1].main=traefik.itm-nex.us"
+      # - "traefik.http.routers.traefik.tls.domains[0].sans=*.itm-nex.us"
 
 networks:
   proxy:
