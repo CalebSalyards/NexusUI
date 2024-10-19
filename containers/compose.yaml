@@ -7,7 +7,7 @@ services:
         - /data/nexus/headscale/config:/etc/headscale/
         - /data/nexus/headscale/keys:/var/lib/headscale/
     ports:
-        - 443:8080
+        - 8080:8080
         - 9090:9090
         - 50443:50443
     command: serve
