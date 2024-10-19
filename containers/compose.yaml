@@ -25,11 +25,11 @@ services:
     image: traefik:3.1
     container_name: traefik
     restart: unless-stopped
-    command:
-      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
-      - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-      - "--certificatesresolvers.myresolver.acme.email=sal18014@byui.edu"
-      - "--certificatesresolvers.myresolver.acme.storage=/acme.json"
+    # command:
+    #   - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+    #   - "--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+    #   - "--certificatesresolvers.myresolver.acme.email=sal18014@byui.edu"
+    #   - "--certificatesresolvers.myresolver.acme.storage=/acme.json"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
