@@ -20,8 +20,7 @@ async function generateCourses() {
         const courseSection = document.createElement('section');
         coursesList.append(courseSection);
         courseSection.addEventListener('click', () => {
-            const courseId = document.getElementById('course-id')
-            getStudentNames()
+            getStudentNames();
         })
     })
 };
