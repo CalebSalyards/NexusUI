@@ -61,6 +61,10 @@ services:
       - "traefik.http.routers.traefik.tls.certresolver=lets_encrypt_resolver"
       - "traefik.http.routers.traefik.tls.domains[0].main=itm-nex.us"
       - "traefik.http.routers.traefik.tls.domains[0].sans=*.itm-nex.us"
+      - "certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "certificatesresolvers.myresolver.acme.email=sal18014@byui.edu"
+      - "certificatesresolvers.myresolver.acme.storage=/acme.json"
 
 networks:
   proxy:
