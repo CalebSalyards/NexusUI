@@ -1,5 +1,17 @@
-# Import the Canvas class
+'''
+You will need to install the following api's:
+    - flask
+    - canvasapi
+'''
+
+
+#import the necessary api's and libraries
+from flask import Flask, jsonify
 from canvasapi import Canvas
+import json
+
+# Flask app initialization
+app = Flask(__name__)
 
 # Canvas API URL
 API_URL = "https://byui.instructure.com"
@@ -9,9 +21,39 @@ API_KEY = "10706~z3LhXDKeVMLMXv2XhHMVCFJeN9NGZMytLMMKPWxZz8aDyvWLYTRWmRNJURGrT7K
 # Initialize a new Canvas object
 canvas = Canvas(API_URL, API_KEY)
 
-current_teacher = canvas.get_courses(enrollment_state = 'active', enrollment_type = 'teacher' )
-courses_ta = canvas.get_courses(enrollment_state = 'active', enrollment_type = 'ta' )
+@app.route('/api/courses', methods=['GET'])
+def get_courses():
+    # Get current teacher's courses
+    current_teacher_courses = canvas.get_courses(enrollment_state='active', enrollment_type='teacher')
 
-for student in courses_ta[0].get_users(enrollment_type=['student']):
-    print(f"{student.short_name} | {student.email} | {courses_ta[0].course_code.replace(" ", "")}{student.email[:3]}!")
-    #print(student.__dict__)
+    # Get current TA's courses
+    current_ta_courses = canvas.get_courses(enrollment_state='active', enrollment_type='ta')
+
+    # Create a list to hold all courses
+    all_courses = []
+
+    # Append courses to the list
+    for course in current_teacher_courses:
+        all_courses.append({
+            'course_id': course.id,
+            'course_name': course.name,
+            'course_code': course.course_code
+        })
+
+    for course in current_ta_courses:
+        all_courses.append({
+            'course_id': course.id,
+            'course_name': course.name,
+            'course_code': course.course_code
+        })
+
+    # Save the JSON output to a file (optional)
+    output_file_name = "courses_list.json"
+    with open(output_file_name, 'w') as json_file:
+        json.dump(all_courses, json_file, indent=4)
+
+    # Return the JSON data as a response
+    return jsonify(all_courses)
+
+if __name__ == '__main__':
+    app.run(debug=True)
