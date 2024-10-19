@@ -28,7 +28,7 @@ providers:
    network: proxy
 
 certificatesResolvers:
-  lets-encrypt-resolver:
+  lets_encrypt_resolver:
     acme:
       email: sal18014@byui.edu
       storage: acme.json
