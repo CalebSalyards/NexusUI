@@ -1,0 +1,66 @@
+services:
+  headscale:
+    image: headscale/headscale:stable
+    container_name: headscale
+    # user: "1002:1002"
+    volumes:
+        - /data/nexus/headscale/config:/etc/headscale/
+        - /data/nexus/headscale/keys:/var/lib/headscale/
+    ports:
+        - 443:8080
+        - 9090:9090
+        - 50443:50443
+    command: serve
+    restart: unless-stopped
+
+  headscale-ui:
+    image: ghcr.io/gurucomputing/headscale-ui:latest
+    pull_policy: always
+    container_name: headscale-ui
+    restart: unless-stopped
+    ports:
+        - 9999:8080
+
+  traefik:
+    traefik:
+    image: traefik:3.1
+    container_name: traefik
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/traefik.yml:ro
+      - /data/nexus/traefik/acme.json:/acme.json
+      # - ./config.yml:/config.yml:ro
+    # secrets:
+    #   - cf_cert_api
+    env_file: .env
+    ports:
+      # - 8087:8080
+      # - 80:80
+      - 0.0.0.0:443:443
+    environment:
+      TRAEFIK_DASHBOARD_CREDENTIALS: ${TRAEFIK_DASHBOARD_CREDENTIALS}
+      CF_DNS_API_TOKEN: ${CFDNS}
+    healthcheck:
+      # Run traefik healthcheck command
+      # https://doc.traefik.io/traefik/operations/cli/#healthcheck
+      test: ["CMD", "traefik", "healthcheck", "--ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+    networks:
+      - proxy
+    labels:
+      # Dashboard
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.itm-nex.us`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.middlewares=authelia@docker"
+      # Certificate management
+      - "traefik.http.routers.traefik.tls=true"
+      - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
+      - "traefik.http.routers.traefik.tls.domains[0].main=itm-nex.us"
+      - "traefik.http.routers.traefik.tls.domains[0].sans=*.itm-nex.us"
