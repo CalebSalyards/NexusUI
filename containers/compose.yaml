@@ -61,3 +61,7 @@ services:
       - "traefik.http.routers.traefik.tls.certresolver=cloudflare"
       - "traefik.http.routers.traefik.tls.domains[0].main=itm-nex.us"
       - "traefik.http.routers.traefik.tls.domains[0].sans=*.itm-nex.us"
+
+networks:
+  proxy:
+    name: proxy
