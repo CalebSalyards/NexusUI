@@ -18,7 +18,7 @@ app = Flask(__name__)
 # Canvas API URL
 API_URL = "https://byui.instructure.com"
 # Canvas API key
-API_KEY = "YOUR_API_KEY_HERE"  # Replace with your actual API key
+API_KEY = "YOUR_API_KEY_HERE10706~z3LhXDKeVMLMXv2XhHMVCFJeN9NGZMytLMMKPWxZz8aDyvWLYTRWmRNJURGrT7K9"  # Replace with your actual API key
 
 # Initialize a new Canvas object
 canvas = Canvas(API_URL, API_KEY)
